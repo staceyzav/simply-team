@@ -92,19 +92,21 @@
 /* Card body
 --------------------------------------------- */
 
+/* Default: dark body — contrasts against a light/white section */
 .st-card__body {
 	padding: 16px 20px 20px;
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
 	flex: 1;
+	background: var( --client-section-dark-bg, #1a1a1a );
 }
 
 .st-card__name {
 	font-family: var( --st-font-display );
 	font-size: 17px;
 	font-weight: 700;
-	color: var( --st-heading );
+	color: var( --client-section-dark-heading, #ffffff );
 	margin: 0;
 	line-height: 1.2;
 }
@@ -128,7 +130,7 @@
 .st-card__phone,
 .st-card__email {
 	font-size: 12px;
-	color: #666;
+	color: var( --client-section-dark-text, rgba( 255, 255, 255, 0.65 ) );
 	font-family: var( --st-font-primary );
 }
 
@@ -139,10 +141,28 @@
 	font-weight: 700;
 	letter-spacing: 0.1em;
 	text-transform: uppercase;
-	color: var( --st-accent );
+	color: var( --client-section-dark-text, rgba( 255, 255, 255, 0.65 ) );
 	border-bottom: 1px solid currentColor;
 	padding-bottom: 1px;
 	align-self: flex-start;
+}
+
+/* Inside .is-dark section — reverse to light body */
+.is-dark .st-card__body {
+	background: #fff;
+}
+
+.is-dark .st-card__name {
+	color: var( --client-heading, #1a1a1a );
+}
+
+.is-dark .st-card__phone,
+.is-dark .st-card__email {
+	color: #666;
+}
+
+.is-dark .st-card__more {
+	color: #666;
 }
 
 
