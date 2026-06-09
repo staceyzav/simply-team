@@ -172,17 +172,17 @@
 .st-panel {
 	position: fixed;
 	top: 0;
-	right: 0;
+	left: 0;
 	width: 420px;
 	max-width: 92vw;
 	height: 100%;
 	background: var( --st-panel-bg );
 	color: var( --st-panel-text );
-	box-shadow: -12px 0 40px rgba( 0, 0, 0, 0.35 );
-	transform: translateX( 100% );
+	box-shadow: 12px 0 40px rgba( 0, 0, 0, 0.35 );
+	transform: translateX( -100% );
 	transition: transform 0.4s cubic-bezier( 0.4, 0, 0.2, 1 );
 	overflow-y: auto;
-	z-index: 9500;
+	z-index: 10001;
 	padding: 0;
 	box-sizing: border-box;
 }
@@ -315,7 +315,7 @@
 	position: fixed;
 	inset: 0;
 	background: rgba( 0, 0, 0, 0.5 );
-	z-index: 9400;
+	z-index: 10000;
 	cursor: pointer;
 }
 
