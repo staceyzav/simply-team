@@ -231,7 +231,7 @@
 	font-family: var( --st-font-display );
 	font-size: 20px;
 	font-weight: 700;
-	color: var( --st-panel-text );
+	color: var( --client-section-dark-heading, #ffffff );
 	margin: 0;
 	line-height: 1.2;
 }
