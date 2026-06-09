@@ -22,15 +22,15 @@
 				panel.setAttribute( 'aria-hidden', 'true' );
 				panel.classList.remove( 'is-open' );
 			} );
-			document.querySelectorAll( '.st-card__inner[aria-expanded="true"]' ).forEach( function ( btn ) {
+			document.querySelectorAll( '.st-card__more[aria-expanded="true"]' ).forEach( function ( btn ) {
 				btn.setAttribute( 'aria-expanded', 'false' );
 			} );
 			if ( overlay ) overlay.classList.remove( 'is-visible' );
 			document.body.classList.remove( 'st-panel-open' );
 		}
 
-		// Card buttons — open panel
-		document.querySelectorAll( '.st-card__inner' ).forEach( function ( btn ) {
+		// More Info buttons — open panel
+		document.querySelectorAll( '.st-card__more' ).forEach( function ( btn ) {
 			btn.addEventListener( 'click', function () {
 				var panelId = btn.getAttribute( 'aria-controls' );
 				if ( ! panelId ) return;

@@ -11,7 +11,7 @@
 	--st-font-primary: var( --client-font-primary,     sans-serif );
 	--st-panel-bg:     var( --client-section-dark-bg,  #1a1a1a );
 	--st-panel-text:   var( --client-section-dark-text,#f0f0f0 );
-	--st-radius:       8px;
+	--st-radius:       var( --client-radius, 0px );
 	--st-gap:          24px;
 }
 
@@ -44,23 +44,12 @@
 .st-card__inner {
 	width: 100%;
 	background: #fff;
-	border: none;
 	border-radius: var( --st-radius );
 	box-shadow: 0 2px 10px rgba( 0, 0, 0, 0.08 );
-	cursor: pointer;
 	text-align: left;
-	padding: 0;
 	overflow: hidden;
 	display: flex;
 	flex-direction: column;
-	transition: box-shadow 0.2s ease, transform 0.2s ease;
-}
-
-.st-card__inner:hover,
-.st-card__inner:focus-visible {
-	box-shadow: 0 6px 24px rgba( 0, 0, 0, 0.14 );
-	transform: translateY( -2px );
-	outline: none;
 }
 
 
@@ -142,9 +131,19 @@
 	letter-spacing: 0.1em;
 	text-transform: uppercase;
 	color: var( --client-section-dark-text, rgba( 255, 255, 255, 0.65 ) );
+	border: none;
 	border-bottom: 1px solid currentColor;
-	padding-bottom: 1px;
+	background: none;
+	padding: 0 0 1px;
+	cursor: pointer;
 	align-self: flex-start;
+	transition: opacity 0.15s ease;
+}
+
+.st-card__more:hover,
+.st-card__more:focus-visible {
+	opacity: 0.75;
+	outline: none;
 }
 
 /* Inside .is-dark section — reverse to light body */
@@ -231,7 +230,7 @@
 	font-family: var( --st-font-display );
 	font-size: 20px;
 	font-weight: 700;
-	color: var( --client-section-dark-heading, #ffffff );
+	color: #ffffff;
 	margin: 0;
 	line-height: 1.2;
 }
