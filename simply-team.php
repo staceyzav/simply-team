@@ -5,14 +5,14 @@
  * Description: Meet-the-team CPT with headshot, role, contact info, and a slide-over bio panel. Shortcode: [simply_team]
  * Author:      Simply Design
  * Author URI:  https://simplydesign.com
- * Version:     1.0.5
+ * Version:     1.0.6
  * License:     GPL-2.0-or-later
  * Text Domain: simply-team
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'ST_VERSION', '1.0.5' );
+define( 'ST_VERSION', '1.0.6' );
 define( 'ST_PATH',    plugin_dir_path( __FILE__ ) );
 define( 'ST_URL',     plugin_dir_url( __FILE__ ) );
 
@@ -193,7 +193,7 @@ function st_shortcode( $atts ) {
 		?>
 		<div class="st-card">
 
-			<div class="st-card__inner">
+			<div class="st-card__inner ss-card">
 
 				<div class="st-card__photo">
 					<?php if ( has_post_thumbnail() ) : ?>
@@ -203,11 +203,11 @@ function st_shortcode( $atts ) {
 					<?php endif; ?>
 				</div>
 
-				<div class="st-card__body">
-					<h3 class="st-card__name"><?php echo esc_html( $name ); ?></h3>
+				<div class="st-card__body ss-card-body">
 					<?php if ( $role ) : ?>
-						<p class="st-card__role"><?php echo esc_html( $role ); ?></p>
+						<p class="st-card__role ss-label"><?php echo esc_html( $role ); ?></p>
 					<?php endif; ?>
+					<h3 class="st-card__name"><?php echo esc_html( $name ); ?></h3>
 
 					<div class="st-card__contact">
 						<?php if ( $phone ) : ?>

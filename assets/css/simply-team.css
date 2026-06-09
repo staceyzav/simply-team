@@ -42,14 +42,11 @@
 }
 
 .st-card__inner {
-	width: 100%;
-	background: #fff;
-	border-radius: var( --st-radius );
-	box-shadow: 0 2px 10px rgba( 0, 0, 0, 0.08 );
+	width: 100%; /* fill the .st-card grid cell */
 	text-align: left;
-	overflow: hidden;
 	display: flex;
 	flex-direction: column;
+	/* base visual (bg, radius, shadow, overflow) inherited from .ss-card */
 }
 
 
@@ -81,9 +78,10 @@
 /* Card body
 --------------------------------------------- */
 
-/* Default: dark body — contrasts against a light/white section */
+/* Default: dark body — contrasts against a light/white section.
+   Override ss-card's white background. */
 .st-card__body {
-	padding: 16px 20px 20px;
+	padding: 16px 20px 20px; /* override ss-card-body bottom */
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
@@ -93,7 +91,6 @@
 
 .st-card__name {
 	font-family: var( --st-font-display );
-	font-size: 17px;
 	font-weight: 700;
 	color: var( --client-section-dark-heading, #ffffff );
 	margin: 0;
@@ -101,12 +98,8 @@
 }
 
 .st-card__role {
-	font-size: 13px;
-	font-weight: 600;
-	letter-spacing: 0.05em;
-	text-transform: uppercase;
-	color: var( --st-accent );
-	margin: 0;
+	color: var( --client-section-dark-heading, rgba( 255, 255, 255, 0.5 ) );
+	margin: 2px 0 0;
 }
 
 .st-card__contact {
@@ -118,7 +111,6 @@
 
 .st-card__phone,
 .st-card__email {
-	font-size: 12px;
 	color: var( --client-section-dark-text, rgba( 255, 255, 255, 0.65 ) );
 	font-family: var( --st-font-primary );
 }
@@ -126,15 +118,13 @@
 .st-card__more {
 	display: inline-block;
 	margin-top: 6px;
-	font-size: 11px;
-	font-weight: 700;
 	letter-spacing: 0.08em;
 	text-transform: uppercase;
 	color: var( --client-section-dark-text, rgba( 255, 255, 255, 0.75 ) );
 	background: rgba( 255, 255, 255, 0.12 );
 	border: 1px solid rgba( 255, 255, 255, 0.25 );
-	border-radius: 100px;
-	padding: 5px 14px;
+	border-radius: var( --client-radius, 100px );
+	padding: 10px 28px;
 	cursor: pointer;
 	align-self: flex-start;
 	transition: background 0.15s ease, border-color 0.15s ease;
@@ -154,6 +144,10 @@
 
 .is-dark .st-card__name {
 	color: var( --client-heading, #1a1a1a );
+}
+
+.is-dark .st-card__role {
+	color: rgba( 0, 0, 0, 0.45 );
 }
 
 .is-dark .st-card__phone,
@@ -229,7 +223,6 @@
 
 .st-panel__name {
 	font-family: var( --st-font-display );
-	font-size: 20px;
 	font-weight: 700;
 	color: #ffffff;
 	margin: 0;
@@ -237,17 +230,16 @@
 }
 
 .st-panel__role {
-	font-size: 12px;
-	font-weight: 600;
-	letter-spacing: 0.08em;
+	font-size: 0.7em;
+	font-weight: 700;
+	letter-spacing: 0.12em;
 	text-transform: uppercase;
-	color: var( --st-accent );
+	color: rgba( 255, 255, 255, 0.5 );
 	margin: 0;
 }
 
 .st-panel__phone,
 .st-panel__email {
-	font-size: 13px;
 	color: rgba( 255, 255, 255, 0.65 );
 	text-decoration: none;
 }
@@ -293,7 +285,6 @@
 .st-panel__bio {
 	padding: 28px 24px 48px;
 	font-family: var( --st-font-primary );
-	font-size: 15px;
 	line-height: 1.7;
 	color: rgba( 255, 255, 255, 0.82 );
 }
