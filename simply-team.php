@@ -5,14 +5,14 @@
  * Description: Meet-the-team CPT with headshot, role, contact info, and a slide-over bio panel. Shortcode: [simply_team]
  * Author:      Simply Design
  * Author URI:  https://simplydesign.com
- * Version:     1.0.6
+ * Version:     1.0.7
  * License:     GPL-2.0-or-later
  * Text Domain: simply-team
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'ST_VERSION', '1.0.6' );
+define( 'ST_VERSION', '1.0.7' );
 define( 'ST_PATH',    plugin_dir_path( __FILE__ ) );
 define( 'ST_URL',     plugin_dir_url( __FILE__ ) );
 
