@@ -95,7 +95,8 @@
 	background: var( --client-section-dark-bg, #1a1a1a );
 }
 
-.st-card__name {
+/* 3-class specificity (0,3,0) beats simply-starter's ss-card h3 reset (0,2,1) */
+.st-card__inner .st-card__body .st-card__name {
 	font-family: var( --st-font-display );
 	font-weight: 700;
 	color: var( --client-section-dark-heading, #ffffff );
@@ -103,7 +104,7 @@
 	line-height: 1.2;
 }
 
-.st-card__role {
+.st-card__inner .st-card__body .st-card__role {
 	color: var( --client-section-dark-heading, rgba( 255, 255, 255, 0.5 ) );
 	margin: 2px 0 0;
 }
@@ -148,11 +149,11 @@
 	background: #fff;
 }
 
-.is-dark .st-card__name {
+.is-dark .st-card__inner .st-card__body .st-card__name {
 	color: var( --client-heading, #1a1a1a );
 }
 
-.is-dark .st-card__role {
+.is-dark .st-card__inner .st-card__body .st-card__role {
 	color: rgba( 0, 0, 0, 0.45 );
 }
 
