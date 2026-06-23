@@ -136,6 +136,32 @@ function st_save_meta( $post_id ) {
 
 
 // ==========================================================================
+// TAXONOMY — st_category
+// ==========================================================================
+
+add_action( 'init', 'st_register_taxonomy' );
+
+function st_register_taxonomy() {
+	register_taxonomy( 'st_category', 'simply_team_member', array(
+		'labels' => array(
+			'name'          => __( 'Team Categories', 'simply-team' ),
+			'singular_name' => __( 'Team Category', 'simply-team' ),
+			'search_items'  => __( 'Search Categories', 'simply-team' ),
+			'all_items'     => __( 'All Categories', 'simply-team' ),
+			'edit_item'     => __( 'Edit Category', 'simply-team' ),
+			'add_new_item'  => __( 'Add New Category', 'simply-team' ),
+			'menu_name'     => __( 'Categories', 'simply-team' ),
+		),
+		'hierarchical'      => true,
+		'show_ui'           => true,
+		'show_in_rest'      => true,
+		'show_admin_column' => true,
+		'rewrite'           => false,
+	) );
+}
+
+
+// ==========================================================================
 // ENQUEUE
 // ==========================================================================
 
@@ -160,17 +186,28 @@ add_shortcode( 'simply_team', 'st_shortcode' );
 function st_shortcode( $atts ) {
 
 	$atts = shortcode_atts( array(
-		'limit'   => -1,
-		'columns' => 3,
+		'limit'    => -1,
+		'columns'  => 3,
+		'category' => '',
 	), $atts, 'simply_team' );
 
-	$members = new WP_Query( array(
+	$query_args = array(
 		'post_type'      => 'simply_team_member',
 		'posts_per_page' => intval( $atts['limit'] ),
 		'post_status'    => 'publish',
 		'orderby'        => 'menu_order title',
 		'order'          => 'ASC',
-	) );
+	);
+
+	if ( ! empty( $atts['category'] ) ) {
+		$query_args['tax_query'] = array( array(
+			'taxonomy' => 'st_category',
+			'field'    => 'slug',
+			'terms'    => array_map( 'sanitize_title', explode( ',', $atts['category'] ) ),
+		) );
+	}
+
+	$members = new WP_Query( $query_args );
 
 	if ( ! $members->have_posts() ) {
 		return '';
