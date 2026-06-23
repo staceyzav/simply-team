@@ -20,17 +20,23 @@
 --------------------------------------------- */
 
 .st-team {
-	display: grid;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
 	gap: var( --st-gap );
-	grid-template-columns: repeat( var( --st-columns, 3 ), 1fr );
+}
+
+.st-card {
+	flex: 0 0 calc( ( 100% - ( var( --st-columns, 3 ) - 1 ) * var( --st-gap, 24px ) ) / var( --st-columns, 3 ) );
+	min-width: 0;
 }
 
 @media ( max-width: 960px ) {
-	.st-team { grid-template-columns: repeat( 2, 1fr ); }
+	.st-card { flex: 0 0 calc( ( 100% - var( --st-gap, 24px ) ) / 2 ); }
 }
 
 @media ( max-width: 600px ) {
-	.st-team { grid-template-columns: 1fr; }
+	.st-card { flex: 0 0 100%; }
 }
 
 
