@@ -272,7 +272,7 @@ function st_shortcode( $atts ) {
 			<div class="st-panel__header">
 				<?php if ( has_post_thumbnail() ) : ?>
 					<div class="st-panel__photo">
-						<?php the_post_thumbnail( 'medium', array( 'alt' => esc_attr( $name ) ) ); ?>
+						<?php the_post_thumbnail( 'large', array( 'alt' => esc_attr( $name ) ) ); ?>
 					</div>
 				<?php endif; ?>
 				<div class="st-panel__intro">
