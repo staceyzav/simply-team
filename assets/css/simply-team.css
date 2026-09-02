@@ -39,7 +39,7 @@
 	border: none !important;
 	border-radius: 0 !important;
 	box-shadow: none !important;
-	color: var( --st-filter-color );
+	color: var( --st-filter-color ) !important;
 	font-family: var( --client-font-display, sans-serif );
 	font-size: 10px;
 	font-weight: 700;
