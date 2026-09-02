@@ -202,24 +202,6 @@
 	outline: none;
 }
 
-/* Inside .is-dark section — reverse to light body */
-.is-dark .st-card__body {
-	background: #fff;
-}
-
-
-.is-dark .st-card__inner .st-card__body .st-card__role {
-	color: rgba( 0, 0, 0, 0.45 );
-}
-
-.is-dark .st-card__phone,
-.is-dark .st-card__email {
-	color: #666;
-}
-
-.is-dark .st-card__more {
-	color: #666;
-}
 
 
 /* Popup modal
@@ -292,7 +274,7 @@
 .st-panel__name {
 	font-family: var( --st-font-display );
 	font-weight: 700;
-	color: #ffffff;
+	color: #ffffff !important;
 	margin: 0;
 	line-height: 1.2;
 }

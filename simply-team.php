@@ -226,6 +226,32 @@ function st_admin_enqueue( $hook ) {
 	' );
 }
 
+add_filter( 'wp_insert_post_data', 'st_preserve_menu_order', 10, 2 );
+function st_preserve_menu_order( $data, $postarr ) {
+	if ( $data['post_type'] !== 'simply_team_member' ) return $data;
+	if ( empty( $postarr['ID'] ) ) return $data;
+	if ( wp_doing_ajax() && isset( $_POST['action'] ) && $_POST['action'] === 'st_save_order' ) return $data;
+	$data['menu_order'] = (int) get_post_field( 'menu_order', $postarr['ID'] );
+	return $data;
+}
+
+add_action( 'pre_get_posts', 'st_admin_sort_by_menu_order' );
+function st_admin_sort_by_menu_order( $query ) {
+	if ( ! is_admin() || ! $query->is_main_query() ) return;
+	if ( $query->get( 'post_type' ) !== 'simply_team_member' ) return;
+	if ( $query->get( 'orderby' ) ) return;
+	$query->set( 'orderby', 'menu_order' );
+	$query->set( 'order', 'ASC' );
+}
+
+add_filter( 'rest_pre_insert_simply_team_member', 'st_rest_preserve_menu_order', 10, 2 );
+function st_rest_preserve_menu_order( $prepared_post, $request ) {
+	if ( ! empty( $prepared_post->ID ) ) {
+		$prepared_post->menu_order = (int) get_post_field( 'menu_order', $prepared_post->ID );
+	}
+	return $prepared_post;
+}
+
 add_action( 'wp_ajax_st_save_order', 'st_ajax_save_order' );
 function st_ajax_save_order() {
 	check_ajax_referer( 'st_save_order', 'nonce' );
