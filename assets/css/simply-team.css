@@ -16,6 +16,64 @@
 }
 
 
+/* Department filter
+--------------------------------------------- */
+
+/* --st-filter-color adapts to whichever section the shortcode sits in */
+.st-filters { --st-filter-color: var( --client-heading, #1a1a1a ); }
+.is-dark    .st-filters { --st-filter-color: var( --client-section-dark-heading,   #ffffff ); }
+.is-light   .st-filters { --st-filter-color: var( --client-section-light-heading,  #1a1a1a ); }
+.is-brand-1 .st-filters { --st-filter-color: var( --client-section-brand1-heading, #ffffff ); }
+.is-brand-2 .st-filters { --st-filter-color: var( --client-section-brand2-heading, #ffffff ); }
+
+.st-filters {
+	display: flex;
+	align-items: center;
+	gap: 24px;
+	flex-wrap: wrap;
+	margin-bottom: 32px;
+}
+
+.st-filter-btn {
+	background: none !important;
+	border: none !important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+	color: var( --st-filter-color );
+	font-family: var( --client-font-display, sans-serif );
+	font-size: 10px;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	text-decoration: none;
+	cursor: pointer;
+	padding: 0 !important;
+	opacity: 1;
+	transition: opacity 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.st-filter-btn:hover,
+.st-filter-btn:focus {
+	background: none !important;
+	background-color: transparent !important;
+	box-shadow: none !important;
+	opacity: 0.75;
+	text-decoration: underline !important;
+	color: var( --st-filter-color ) !important;
+	transform: none !important;
+}
+
+.st-filter-btn.is-active,
+.st-filter-btn.is-active:hover {
+	background: none !important;
+	background-color: transparent !important;
+	box-shadow: none !important;
+	text-decoration: underline !important;
+	color: var( --st-filter-color ) !important;
+	transform: none !important;
+}
+
+
 /* Grid
 --------------------------------------------- */
 
@@ -99,7 +157,7 @@
 .st-card__inner .st-card__body .st-card__name {
 	font-family: var( --st-font-display );
 	font-weight: 700;
-	color: var( --client-section-dark-heading, #ffffff );
+	color: #ffffff !important;
 	margin: 0;
 	line-height: 1.2;
 }
@@ -149,9 +207,6 @@
 	background: #fff;
 }
 
-.is-dark .st-card__inner .st-card__body .st-card__name {
-	color: var( --client-heading, #1a1a1a );
-}
 
 .is-dark .st-card__inner .st-card__body .st-card__role {
 	color: rgba( 0, 0, 0, 0.45 );
@@ -167,29 +222,35 @@
 }
 
 
-/* Slide-over panel
+/* Popup modal
 --------------------------------------------- */
 
 .st-panel {
 	position: fixed;
-	top: 0;
-	left: 0;
-	width: 420px;
-	max-width: 92vw;
-	height: 100%;
+	inset: 0;
+	margin: auto;
+	width: min( 600px, 92vw );
+	height: fit-content;
+	max-height: calc( 100vh - 40px );
 	background: var( --st-panel-bg );
 	color: var( --st-panel-text );
-	box-shadow: 12px 0 40px rgba( 0, 0, 0, 0.35 );
-	transform: translateX( -100% );
-	transition: transform 0.4s cubic-bezier( 0.4, 0, 0.2, 1 );
+	box-shadow: 0 24px 64px rgba( 0, 0, 0, 0.45 );
+	border: 5px solid #fff;
+	border-radius: var( --client-radius, 8px );
+	transform: translateY( 10px );
+	opacity: 0;
+	pointer-events: none;
+	transition: transform 0.3s cubic-bezier( 0.4, 0, 0.2, 1 ), opacity 0.3s ease;
 	overflow-y: auto;
-	z-index: 10001;
+	z-index: 100002;
 	padding: 0;
 	box-sizing: border-box;
 }
 
 .st-panel.is-open {
-	transform: translateX( 0 );
+	transform: translateY( 0 );
+	opacity: 1;
+	pointer-events: auto;
 }
 
 
@@ -312,8 +373,8 @@
 	display: none;
 	position: fixed;
 	inset: 0;
-	background: rgba( 0, 0, 0, 0.5 );
-	z-index: 10000;
+	background: rgba( 0, 0, 0, 0.72 );
+	z-index: 100001;
 	cursor: pointer;
 }
 

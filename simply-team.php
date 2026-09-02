@@ -144,13 +144,13 @@ add_action( 'init', 'st_register_taxonomy' );
 function st_register_taxonomy() {
 	register_taxonomy( 'st_category', 'simply_team_member', array(
 		'labels' => array(
-			'name'          => __( 'Team Categories', 'simply-team' ),
-			'singular_name' => __( 'Team Category', 'simply-team' ),
-			'search_items'  => __( 'Search Categories', 'simply-team' ),
-			'all_items'     => __( 'All Categories', 'simply-team' ),
-			'edit_item'     => __( 'Edit Category', 'simply-team' ),
-			'add_new_item'  => __( 'Add New Category', 'simply-team' ),
-			'menu_name'     => __( 'Categories', 'simply-team' ),
+			'name'          => __( 'Departments', 'simply-team' ),
+			'singular_name' => __( 'Department', 'simply-team' ),
+			'search_items'  => __( 'Search Departments', 'simply-team' ),
+			'all_items'     => __( 'All Departments', 'simply-team' ),
+			'edit_item'     => __( 'Edit Department', 'simply-team' ),
+			'add_new_item'  => __( 'Add New Department', 'simply-team' ),
+			'menu_name'     => __( 'Departments', 'simply-team' ),
 		),
 		'hierarchical'      => true,
 		'show_ui'           => true,
@@ -158,6 +158,86 @@ function st_register_taxonomy() {
 		'show_admin_column' => true,
 		'rewrite'           => false,
 	) );
+}
+
+
+// ==========================================================================
+// ADMIN — drag-to-reorder
+// ==========================================================================
+
+add_filter( 'manage_simply_team_member_posts_columns', 'st_admin_columns' );
+function st_admin_columns( $columns ) {
+	return array(
+		'cb'       => $columns['cb'],
+		'st_order' => '',
+		'st_photo' => __( 'Photo', 'simply-team' ),
+		'title'    => $columns['title'],
+		'st_role'  => __( 'Role', 'simply-team' ),
+		'st_phone' => __( 'Phone', 'simply-team' ),
+		'st_email' => __( 'Email', 'simply-team' ),
+		'date'     => $columns['date'],
+	);
+}
+
+add_action( 'manage_simply_team_member_posts_custom_column', 'st_admin_column_content', 10, 2 );
+function st_admin_column_content( $column, $post_id ) {
+	if ( $column === 'st_order' ) {
+		echo '<span class="st-drag-handle" title="Drag to reorder">&#9776;</span>';
+	}
+	if ( $column === 'st_photo' ) {
+		$thumb = get_the_post_thumbnail( $post_id, array( 48, 48 ) );
+		echo $thumb ?: '—';
+	}
+	if ( $column === 'st_role' ) {
+		echo esc_html( get_post_meta( $post_id, '_st_role', true ) ?: '—' );
+	}
+	if ( $column === 'st_phone' ) {
+		echo esc_html( get_post_meta( $post_id, '_st_phone', true ) ?: '—' );
+	}
+	if ( $column === 'st_email' ) {
+		echo esc_html( get_post_meta( $post_id, '_st_email', true ) ?: '—' );
+	}
+}
+
+add_action( 'admin_enqueue_scripts', 'st_admin_enqueue' );
+function st_admin_enqueue( $hook ) {
+	$screen = get_current_screen();
+	if ( ! $screen || $screen->id !== 'edit-simply_team_member' ) return;
+
+	wp_enqueue_script( 'jquery-ui-sortable' );
+	wp_enqueue_script(
+		'st-sort',
+		ST_URL . 'admin/js/st-sort.js',
+		array( 'jquery', 'jquery-ui-sortable' ),
+		ST_VERSION,
+		true
+	);
+	wp_localize_script( 'st-sort', 'stSort', array(
+		'nonce'   => wp_create_nonce( 'st_save_order' ),
+		'ajaxurl' => admin_url( 'admin-ajax.php' ),
+	) );
+	wp_add_inline_style( 'list-tables', '
+		.column-st_order { width: 32px; padding: 8px 4px !important; text-align: center; }
+		.column-st_photo { width: 58px; }
+		.column-st_photo img { width: 48px; height: 48px; object-fit: cover; border-radius: 50%; display: block; }
+		.st-drag-handle { cursor: grab; font-size: 16px; color: #aaa; display: inline-block; padding: 4px 6px; line-height: 1; }
+		.st-drag-handle:hover { color: #555; }
+		#the-list tr.st-dragging { background: #f0f6fc; outline: 2px dashed #72aee6; }
+	' );
+}
+
+add_action( 'wp_ajax_st_save_order', 'st_ajax_save_order' );
+function st_ajax_save_order() {
+	check_ajax_referer( 'st_save_order', 'nonce' );
+	if ( ! current_user_can( 'edit_posts' ) ) wp_die( -1 );
+
+	$order = isset( $_POST['order'] ) ? array_map( 'absint', (array) $_POST['order'] ) : array();
+	foreach ( $order as $position => $post_id ) {
+		if ( $post_id ) {
+			wp_update_post( array( 'ID' => $post_id, 'menu_order' => $position ) );
+		}
+	}
+	wp_send_json_success();
 }
 
 
@@ -215,8 +295,29 @@ function st_shortcode( $atts ) {
 
 	$cols = max( 1, min( 5, intval( $atts['columns'] ) ) );
 
+	// Collect dept terms for filter buttons
+	$all_member_ids = wp_list_pluck( $members->posts, 'ID' );
+	$dept_terms     = get_terms( [
+		'taxonomy'   => 'st_category',
+		'hide_empty' => true,
+		'orderby'    => 'name',
+		'order'      => 'ASC',
+		'object_ids' => $all_member_ids,
+	] );
+	$show_filter = ! is_wp_error( $dept_terms ) && count( $dept_terms ) > 1;
+
 	ob_start();
 	?>
+
+	<?php if ( $show_filter ) : ?>
+	<div class="st-filters">
+		<button class="st-filter-btn is-active" data-dept="all"><?php esc_html_e( 'All', 'simply-team' ); ?></button>
+		<?php foreach ( $dept_terms as $term ) : ?>
+			<button class="st-filter-btn" data-dept="<?php echo esc_attr( $term->slug ); ?>"><?php echo esc_html( $term->name ); ?></button>
+		<?php endforeach; ?>
+	</div>
+	<?php endif; ?>
+
 	<div class="st-team" style="--st-columns:<?php echo $cols; ?>">
 
 		<?php while ( $members->have_posts() ) : $members->the_post();
@@ -227,8 +328,13 @@ function st_shortcode( $atts ) {
 			$bio   = get_the_content();
 			$name  = get_the_title();
 			$panel_id = 'st-panel-' . $id;
+
+			$member_terms = get_the_terms( $id, 'st_category' );
+			$dept_slugs   = ( $member_terms && ! is_wp_error( $member_terms ) )
+				? implode( ' ', wp_list_pluck( $member_terms, 'slug' ) )
+				: '';
 		?>
-		<div class="st-card">
+		<div class="st-card"<?php echo $dept_slugs ? ' data-dept="' . esc_attr( $dept_slugs ) . '"' : ''; ?>>
 
 			<div class="st-card__inner ss-card">
 

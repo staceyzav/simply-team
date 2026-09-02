@@ -61,6 +61,31 @@
 			if ( e.key === 'Escape' ) closeAll();
 		} );
 
+		// Department filter
+		document.querySelectorAll( '.st-filters' ).forEach( function ( filters ) {
+			var btns = filters.querySelectorAll( '.st-filter-btn' );
+			var team = filters.nextElementSibling;
+			if ( ! team ) return;
+			var cards = team.querySelectorAll( '.st-card' );
+
+			btns.forEach( function ( btn ) {
+				btn.addEventListener( 'click', function () {
+					btns.forEach( function ( b ) { b.classList.remove( 'is-active' ); } );
+					btn.classList.add( 'is-active' );
+
+					var dept = btn.dataset.dept;
+					cards.forEach( function ( card ) {
+						if ( dept === 'all' ) {
+							card.style.display = '';
+						} else {
+							var depts = ( card.dataset.dept || '' ).split( ' ' );
+							card.style.display = depts.indexOf( dept ) !== -1 ? '' : 'none';
+						}
+					} );
+				} );
+			} );
+		} );
+
 	} );
 
 } )();
